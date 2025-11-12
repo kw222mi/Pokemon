@@ -4,7 +4,7 @@ using System;
 
 try
 {
-    var bulbasaur = new PokemonCreature("Bulbasaur", 1, ElementType.Grass);
+    var bulbasaur = new GrassPokemon("Bulbasaur", 1);
     bulbasaur.PrintInfo(); // => "Bulbasaur (Grass, Level 1)"
 
 
@@ -18,6 +18,9 @@ try
 
     bulbasaur.UseAttackAt(0);
 
+    bulbasaur.RaiseLevel(2);
+
+    bulbasaur.UseAttackAt(0);
 
     //bulbasaur.UseAttack(vineWhip); // "Bulbasaur använder Vine Whip – Skada: 8 (7+1)"
     //bulbasaur.UseAttack(leafage);  // "Bulbasaur använder Leafage – Skada: 12 (11+1)

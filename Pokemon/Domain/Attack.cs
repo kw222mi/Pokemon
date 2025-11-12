@@ -36,10 +36,16 @@ namespace Pokemon.Domain
         /// <summary>
         /// format message for standard attack 
         /// </summary>
-        public string FormatMessage(string attackerName, int attackerLevel)
+        public string FormatMessage(string attackerName, int attackerLevel, int damage)
         {
-            var damage = CalculateDamage(attackerLevel);
+           
             return $"{attackerName} använder {Name} – Skada: {damage} ({BasePower}+{attackerLevel})";
         }
+
+        public override string ToString()
+        {
+            return $"{Name} ({Type}, BP {BasePower})";
+        }
+
     }
 }

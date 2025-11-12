@@ -2,14 +2,14 @@
 
 namespace Pokemon.Domain
 {
-    public class PokemonCreature
+    public abstract class PokemonCreature
     {
         public string Name { get; private set; }
         public int Level { get; private set; }
-        public ElementType Type { get; private set; }
-        private List <Attack> _attacks;
+        public ElementType Type { get; protected set; }
+        private readonly List <Attack> _attacks;
 
-        public PokemonCreature(string name, int level, ElementType type)
+        protected PokemonCreature(string name, int level )
             
         {
             // Validate
@@ -26,23 +26,12 @@ namespace Pokemon.Domain
             //Set
             Name = name;
             Level = level;
-            Type = type;
 
             _attacks = new List <Attack>();
         }
         public void PrintInfo()
         {
             Console.WriteLine($"{Name} ({Type}, Level {Level})");
-
-        }
-
-        public void UseSimpleAttack (string attackName, int basePower) {
-            if (string.IsNullOrWhiteSpace(attackName)) { throw new ArgumentException("Attacknamn saknas. Ange minst 1 tecken."); }
-
-            if(basePower <= 0) { throw new ArgumentException("BasePower måste vara > 0."); }
-
-                int damage = basePower + Level;
-            Console.WriteLine($"{Name} använder {attackName} – Skada: {damage} ({basePower}+{Level})");
 
         }
 
@@ -56,6 +45,8 @@ namespace Pokemon.Domain
                 throw new ArgumentOutOfRangeException(nameof(delta), "Ogiltig level efter ökning.");
 
             Level = newLevel;
+
+            Console.WriteLine($"Level höjs till {Level} ");
         }
 
         /// <summary>
@@ -66,8 +57,9 @@ namespace Pokemon.Domain
             if (attack is null)
                 throw new ArgumentNullException(nameof(attack), "Attack saknas.");
 
-
-            Console.WriteLine(attack.FormatMessage(Name, Level));
+            int damage = attack.CalculateDamage(this.Level);
+            
+            Console.WriteLine(attack.FormatMessage(Name, Level, damage));
         }
 
         /// <summary>
@@ -111,7 +103,7 @@ namespace Pokemon.Domain
                 int i = 0;
                 foreach (var item in _attacks)
                 {
-                    Console.WriteLine($"{i}:  {item.Name}, {item.Type}, BP: {item.BasePower}");
+                    Console.WriteLine($"{i}: {item}");
                     i++;
                 }
             }
