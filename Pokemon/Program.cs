@@ -1,16 +1,27 @@
 ﻿using Pokemon.Domain;
+using System;
 
 
 try
 {
-    // A2 – giltig skapelse + utskrift
-    var bulbasaur = new PokemonCreature("Bulbasaur", 1);
-    bulbasaur.PrintInfo();
+    var bulbasaur = new PokemonCreature("Bulbasaur", 1, ElementType.Grass);
+    bulbasaur.PrintInfo(); // => "Bulbasaur (Grass, Level 1)"
 
-    // A3 – gröna testfall (ska fungera)
-    bulbasaur.UseSimpleAttack("Tackle", 5);
-    bulbasaur.UseSimpleAttack("Vine Whip", 7);
-    bulbasaur.UseSimpleAttack("  Leafage  ", 11); // visar trim
+
+    var vineWhip = new Attack("Vine Whip", ElementType.Grass, 7);
+    var leafage = new Attack("Leafage", ElementType.Grass, 11);
+
+    bulbasaur.AddAttack(vineWhip);
+    bulbasaur.AddAttack(leafage);
+
+    bulbasaur.ListAttacks();
+
+    bulbasaur.UseAttackAt(0);
+
+
+    //bulbasaur.UseAttack(vineWhip); // "Bulbasaur använder Vine Whip – Skada: 8 (7+1)"
+    //bulbasaur.UseAttack(leafage);  // "Bulbasaur använder Leafage – Skada: 12 (11+1)
+
 }
 catch (ArgumentOutOfRangeException ex)
 {
@@ -29,35 +40,7 @@ catch (Exception ex)
     Console.WriteLine($"[OVÄNTAT FEL] {ex.Message}");
 }
 
-// Röda testfall – visar felhantering (ska INTE krascha programmet)
-try
-{
-    var badName = new PokemonCreature(" ", 1); // Namn saknas
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"[FEL vid skapande] {ex.Message}");
-}
 
-try
-{
-    var p = new PokemonCreature("Pi", 3);
-    p.UseSimpleAttack("", 5); // Ogiltigt attacknamn
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"[FEL vid attack] {ex.Message}");
-}
 
-try
-{
-    var p = new PokemonCreature("Eevee", 2);
-    p.UseSimpleAttack("Quick Attack", 0); // basePower ≤ 0
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"[FEL vid attack] {ex.Message}");
-}
 
-Console.WriteLine("Programmet avslutas.");
         
