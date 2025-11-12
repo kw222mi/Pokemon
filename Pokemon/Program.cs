@@ -1,32 +1,63 @@
 ﻿using Pokemon.Domain;
 
 
-
-
-
-
 try
 {
-    var pokemon = new PokemonCreature("Bulbasaur", 1);
-    pokemon.PrintInfo();
+    // A2 – giltig skapelse + utskrift
+    var bulbasaur = new PokemonCreature("Bulbasaur", 1);
+    bulbasaur.PrintInfo();
 
-    pokemon.UseSimpleAttack("Tackle", 5);
-    //pokemon.UseSimpleAttack("Tackle", 0);
-    //pokemon.UseSimpleAttack("Tackle", -3);
-    //pokemon.UseSimpleAttack("", 5);
-    pokemon.UseSimpleAttack(" Leafage ", 11);
+    // A3 – gröna testfall (ska fungera)
+    bulbasaur.UseSimpleAttack("Tackle", 5);
+    bulbasaur.UseSimpleAttack("Vine Whip", 7);
+    bulbasaur.UseSimpleAttack("  Leafage  ", 11); // visar trim
+}
+catch (ArgumentOutOfRangeException ex)
+{
+    Console.WriteLine($"[FEL] {ex.Message}");
 }
 catch (ArgumentException ex)
 {
-    // Fångar valideringsfel (t.ex. attackName/basePower)
     Console.WriteLine($"[FEL] {ex.Message}");
+}
+catch (OverflowException ex)
+{
+    Console.WriteLine($"[FEL] Overflow i beräkning: {ex.Message}");
 }
 catch (Exception ex)
 {
-    // Fångar *oväntade* fel (t.ex. null-referenser eller skrivfel)
     Console.WriteLine($"[OVÄNTAT FEL] {ex.Message}");
 }
-finally
+
+// Röda testfall – visar felhantering (ska INTE krascha programmet)
+try
 {
-    // (valfritt) kod som alltid körs, t.ex. “Programmet avslutas.”
+    var badName = new PokemonCreature(" ", 1); // Namn saknas
 }
+catch (Exception ex)
+{
+    Console.WriteLine($"[FEL vid skapande] {ex.Message}");
+}
+
+try
+{
+    var p = new PokemonCreature("Pi", 3);
+    p.UseSimpleAttack("", 5); // Ogiltigt attacknamn
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"[FEL vid attack] {ex.Message}");
+}
+
+try
+{
+    var p = new PokemonCreature("Eevee", 2);
+    p.UseSimpleAttack("Quick Attack", 0); // basePower ≤ 0
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"[FEL vid attack] {ex.Message}");
+}
+
+Console.WriteLine("Programmet avslutas.");
+        

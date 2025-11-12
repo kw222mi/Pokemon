@@ -13,6 +13,18 @@ namespace Pokemon.Domain
         public string Name { get; set; }
         public int Level { get; set; }
         public PokemonCreature(string name, int level) {
+            // --- Validering ---
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Namn saknas. Ange 2–15 tecken.", nameof(name));
+
+            name = name.Trim();
+            if (name.Length < 2 || name.Length > 15)
+                throw new ArgumentOutOfRangeException(nameof(name), "Ogiltigt namn. Längd måste vara 2–15 tecken.");
+
+            if (level < 1)
+                throw new ArgumentOutOfRangeException(nameof(level), "Ogiltig level. Level måste vara ≥ 1.");
+
+            // --- Sättning ---
             Name = name;
             Level = level;
         }
@@ -30,6 +42,18 @@ namespace Pokemon.Domain
                 int damage = basePower + Level;
             Console.WriteLine($"{Name} använder {attackName} – Skada: {damage} ({basePower}+{Level})");
 
+        }
+
+        public void RaiseLevel(int delta)
+        {
+            if (delta <= 0)
+                throw new ArgumentException("Level-ökning måste vara > 0.", nameof(delta));
+
+            int newLevel = checked(Level + delta);
+            if (newLevel < 1)
+                throw new ArgumentOutOfRangeException(nameof(delta), "Ogiltig level efter ökning.");
+
+            Level = newLevel;
         }
 
     }
