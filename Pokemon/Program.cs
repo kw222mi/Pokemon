@@ -1,4 +1,5 @@
 ﻿using Pokemon.Domain;
+using Pokemon.Domain.Species;
 using System;
 
 
@@ -22,8 +23,9 @@ try
 
     bulbasaur.UseAttackAt(0);
 
-    //bulbasaur.UseAttack(vineWhip); // "Bulbasaur använder Vine Whip – Skada: 8 (7+1)"
-    //bulbasaur.UseAttack(leafage);  // "Bulbasaur använder Leafage – Skada: 12 (11+1)
+    var charmander = new Charmander();
+    charmander.PrintInfo();
+    charmander.ListAttacks();
 
 }
 catch (ArgumentOutOfRangeException ex)
