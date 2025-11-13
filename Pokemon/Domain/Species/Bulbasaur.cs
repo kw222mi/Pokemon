@@ -30,5 +30,5 @@ namespace Pokemon.Domain.Species
 
 // OBS: I ett större spel skulle namn, typ och attacker hämtas från en databas
 // eller "species registry" i stället för att hårdkodas i varje klass.
-// Här hårdkodar vi för att visa arv och konstruktoranrop tydligt (kursuppgift).
+// Här hårdkodar jag för att visa arv och konstruktoranrop tydligt (kursuppgift).
 

@@ -1,8 +1,9 @@
 ﻿
+using Pokemon.Domain;
 
 namespace Pokemon.Domain.Species
 {
-    public class Charmander : FirePokemon
+    public class Charmander : FirePokemon, IEvolvable
     {
 
         public Charmander() : base ("Charmander", 1) {
@@ -29,11 +30,24 @@ namespace Pokemon.Domain.Species
             AddAttack(flameBurst);
 
         }
+
+        public PokemonCreature Evolve()
+        {
+
+            if (this.Level < 10) throw new InvalidOperationException(
+            $"{Name} kan inte evolva före level 10. (Nuvarande level: {Level})");
+
+            else
+                    {
+                        var level = this.Level + 10;
+                        return new Charmeleon(level);
+                    }
+        }
     }
 }
 
 
 // OBS: I ett större spel skulle namn, typ och attacker hämtas från en databas
 // eller "species registry" i stället för att hårdkodas i varje klass.
-// Här hårdkodar vi för att visa arv och konstruktoranrop tydligt (kursuppgift).
+// Här hårdkodar jag för att visa arv och konstruktoranrop tydligt (kursuppgift).
 
