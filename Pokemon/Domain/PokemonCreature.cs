@@ -192,5 +192,11 @@
                 }
             }
         }
+
+        public virtual void Speak ()
+        {
+            Console.WriteLine($"{Name} makes a sound");
+
+        }
     }
 }

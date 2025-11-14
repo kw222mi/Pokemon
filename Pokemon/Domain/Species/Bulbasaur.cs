@@ -35,6 +35,11 @@ namespace Pokemon.Domain.Species
             AddAttack(vineWhip);
             AddAttack(leafage);
         }
+
+        public override void Speak()
+        {
+            Console.WriteLine($"{Name} speaks: Brrrrr brrr");
+        }
     }
 }
 

@@ -39,5 +39,10 @@ namespace Pokemon.Domain.Species
             AddAttack(flameBurst);
             AddAttack(superFireKick);
         }
+
+        public override void Speak()
+        {
+            Console.WriteLine($"{Name} speaks: Charrrrrr");
+        }
     }
 }

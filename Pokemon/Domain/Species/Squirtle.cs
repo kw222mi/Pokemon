@@ -54,6 +54,11 @@ namespace Pokemon.Domain.Species
             int newLevel = Level + 10;
             return new Wartortle(newLevel);
         }
+
+        public override void Speak()
+        {
+            Console.WriteLine($"{Name} speaks: Squirr squirr!");
+        }
     }
 }
 

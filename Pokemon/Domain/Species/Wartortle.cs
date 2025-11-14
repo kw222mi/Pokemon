@@ -37,5 +37,10 @@
             AddAttack(bubble);
             AddAttack(legendaryBubble);
         }
+
+        public override void Speak()
+        {
+            Console.WriteLine($"{Name} speaks: Turtle roar!!");
+        }
     }
 }

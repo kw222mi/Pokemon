@@ -25,6 +25,13 @@ try
         p.ListAttacks();
     }
 
+
+    foreach (var p in party)
+    {
+        p.Speak();
+    }
+
+
     // 3) Use attacks by index to demonstrate attack list + UseAttackAt.
     Console.WriteLine("\n-- UseAttackAt --");
     party[0].UseAttackAt(1); // Bulbasaur uses Leafage

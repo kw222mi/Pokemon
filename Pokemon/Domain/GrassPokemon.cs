@@ -5,7 +5,7 @@
     /// This class ensures that any subclass is automatically assigned the Grass element type,
     /// so species classes only need to provide their name and starting level.
     /// </summary>
-    public class GrassPokemon : PokemonCreature
+    public abstract class GrassPokemon : PokemonCreature
     {
         /// <summary>
         /// Initializes a new grass-type Pokémon with the specified name and level.

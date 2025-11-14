@@ -5,7 +5,7 @@
     /// This class ensures that any fire species automatically receives
     /// the Fire elemental type, leaving only name and level for subclasses to define.
     /// </summary>
-    public class FirePokemon : PokemonCreature
+    public abstract class FirePokemon : PokemonCreature
     {
         /// <summary>
         /// Initializes a new fire-type Pokémon with the specified name and level.
@@ -18,5 +18,7 @@
         {
             Type = ElementType.Fire;
         }
+
+       
     }
 }
