@@ -1,21 +1,23 @@
 ﻿using Pokemon.Domain;
 using Pokemon.Domain.Species;
-using System;
 
 
+// Entry point for the Pokémon console demo.
+// Demonstrates creation of a party, attacks, leveling, evolution and error handling.
 try
 {
     Console.WriteLine("=== Pokémon demo start ===");
 
-    // Party med tre arter
+    // 1) Create a party with three starter species.
+    //    Each species configures its own type and starting moves in the constructor.
     var party = new List<PokemonCreature>
-            {
-                new Bulbasaur(),   // Grass, L1, Vine Whip / Leafage
-                new Charmander(),  // Fire,  L1, Ember / Flame Burst
-                new Squirtle()     // Water, L1, Water Gun / Bubble
-            };
+    {
+        new Bulbasaur(),   // Grass, L1, Vine Whip / Leafage
+        new Charmander(),  // Fire,  L1, Ember / Flame Burst
+        new Squirtle()     // Water, L1, Water Gun / Bubble
+    };
 
-    // Visa info och startattacker
+    // 2) Print basic info and starting attacks for each Pokémon.
     Console.WriteLine("\n-- Party info --");
     foreach (var p in party)
     {
@@ -23,102 +25,87 @@ try
         p.ListAttacks();
     }
 
-    // Använd attacker via index
-    Console.WriteLine("\n-- B3: UseAttackAt --");
-    party[0].UseAttackAt(1); // Bulbasaur kör Leafage
-    party[1].UseAttackAt(0); // Charmander kör Ember
-    party[2].UseAttackAt(0); // Squirtle kör Water Gun
+    // 3) Use attacks by index to demonstrate B3 (attack list + UseAttackAt).
+    Console.WriteLine("\n-- UseAttackAt --");
+    party[0].UseAttackAt(1); // Bulbasaur uses Leafage
+    party[1].UseAttackAt(0); // Charmander uses Ember
+    party[2].UseAttackAt(0); // Squirtle uses Water Gun
 
-    // Levla och bekräfta att skadan påverkas
-    Console.WriteLine("\n-- B4: RaiseLevel påverkar skada --");
+    // 4) Level up and verify that damage scales with level (B4).
+    Console.WriteLine("\n--: RaiseLevel affects damage --");
     party[0].RaiseLevel(2);  // Bulbasaur L1 -> L3
-    party[1].RaiseLevel(9); //Charmander L1 -> L10
-    party[0].UseAttackAt(1); // Samma attack som tidigare, skadan ska öka med +2
+    party[1].RaiseLevel(9);  // Charmander L1 -> L10 (ready for evolution in C3)
 
-    // Evolution – ersätt i listan om arten är evolvable
-    Console.WriteLine("\n-- C3: Evolution --");
+    // Reuse the same move as before for Bulbasaur; damage should increase by +2.
+    party[0].UseAttackAt(1);
+
+    // 5) Evolution – replace evolvable Pokémon in the party with their next form (C3).
+    Console.WriteLine("\n-- Evolution --");
     for (int i = 0; i < party.Count; i++)
     {
         var mon = party[i];
 
+        // Only Pokémon that implement IEvolvable can be evolved.
         if (mon is IEvolvable evo)
         {
             try
             {
-                var evolved = evo.Evolve(); // returnerar ny art (t.ex. Charmeleon) med +10 level
-                party[i] = evolved;         // ersätt i listan
+                // Evolve returns a new instance of the next species (e.g. Charmeleon) with +10 levels.
+                var evolved = evo.Evolve();
+                party[i] = evolved; // Replace the old Pokémon in the party with the evolved one.
+
                 Console.WriteLine($"[OK] {mon.Name} utvecklas till {evolved.Name}! Ny level: {evolved.Level}");
+
                 evolved.PrintInfo();
                 evolved.ListAttacks();
-                // Provkör en attack efter evolution
+
+                // Try one attack after evolution to verify that everything still works.
                 evolved.UseAttackAt(0);
             }
             catch (Exception ex)
             {
+                // Local error handling for evolution: we log the problem but continue with the rest of the party.
                 Console.WriteLine($"[FEL vid evolution av {mon.Name}] {ex.Message}");
             }
         }
         else
         {
+            // Information for non-evolvable species (e.g. Bulbasaur if you chose not to implement evolution yet).
             Console.WriteLine($"[INFO] {mon.Name} kan inte evolva (IEvolvable saknas).");
         }
     }
 
-    // Felvägar: ogiltigt index & tom lista
-    Console.WriteLine("\n-- Felvägar --");
+    // 6) Error path demo – show that invalid input is handled and does not crash the program.
+    Console.WriteLine("\n-- Felvägar (error paths) --");
     try
     {
-        party[1].UseAttackAt(99); // index utanför intervall
+        // Intentionally use an invalid index to trigger validation in UseAttackAt.
+        party[1].UseAttackAt(99);
     }
     catch (Exception ex)
     {
         Console.WriteLine($"[FEL väntat] {ex.Message}");
     }
 
-
     Console.WriteLine("\n=== Pokémon demo slut ===");
-
-    /*
-
-    List<PokemonCreature> party = new List<PokemonCreature>();
-
-
-    var bulbasaur = new GrassPokemon("Bulbasaur", 1);
-    bulbasaur.PrintInfo(); // => "Bulbasaur (Grass, Level 1)"
-
-    var vineWhip = new Attack("Vine Whip", ElementType.Grass, 7);
-    var leafage = new Attack("Leafage", ElementType.Grass, 11);
-    bulbasaur.AddAttack(vineWhip);
-    bulbasaur.AddAttack(leafage);
-    bulbasaur.ListAttacks();
-    bulbasaur.UseAttackAt(0);
-    bulbasaur.RaiseLevel(2);
-    bulbasaur.UseAttackAt(0);
-
-    var charmander = new Charmander();
-    charmander.PrintInfo();
-    charmander.ListAttacks();
-    */
-
 }
 catch (ArgumentOutOfRangeException ex)
 {
+    // Domain-level validation errors where a numeric argument is out of the allowed range.
     Console.WriteLine($"[FEL] {ex.Message}");
 }
 catch (ArgumentException ex)
 {
+    // General argument validation errors (e.g. empty name, invalid base power, etc.).
     Console.WriteLine($"[FEL] {ex.Message}");
 }
 catch (OverflowException ex)
 {
+    // Overflow in arithmetic (e.g. BasePower + Level exceeding int.MaxValue).
     Console.WriteLine($"[FEL] Overflow i beräkning: {ex.Message}");
 }
 catch (Exception ex)
 {
+    // Final safety net for any unexpected exception types.
     Console.WriteLine($"[OVÄNTAT FEL] {ex.Message}");
 }
-
-
-
-
-        
