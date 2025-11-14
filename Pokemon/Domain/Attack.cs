@@ -1,4 +1,6 @@
-﻿namespace Pokemon.Domain
+﻿using static System.Net.Mime.MediaTypeNames;
+
+namespace Pokemon.Domain
 {
     /// <summary>
     /// Represents a single attack (move) that a Pokémon can use,
@@ -42,6 +44,17 @@
             Name = name;
             Type = type;
             BasePower = basePower;
+        }
+
+        public virtual void Use(int attackerLevel)
+        {
+            if (attackerLevel < 1)
+                throw new ArgumentOutOfRangeException(nameof(attackerLevel), "Level måste vara ≥ 1.");
+
+            int damage = BasePower + attackerLevel;
+
+            Console.WriteLine($"{Name} unleashes its potential damage {damage}");
+
         }
 
         /// <summary>
