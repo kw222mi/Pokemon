@@ -25,21 +25,23 @@ try
         p.ListAttacks();
     }
 
-    // 3) Use attacks by index to demonstrate B3 (attack list + UseAttackAt).
+    // 3) Use attacks by index to demonstrate attack list + UseAttackAt.
     Console.WriteLine("\n-- UseAttackAt --");
     party[0].UseAttackAt(1); // Bulbasaur uses Leafage
     party[1].UseAttackAt(0); // Charmander uses Ember
     party[2].UseAttackAt(0); // Squirtle uses Water Gun
 
-    // 4) Level up and verify that damage scales with level (B4).
-    Console.WriteLine("\n--: RaiseLevel affects damage --");
+    // 4) Level up and verify that damage scales with level.
+    Console.WriteLine("\n--: RaiseLevel påverkar damage --");
     party[0].RaiseLevel(2);  // Bulbasaur L1 -> L3
-    party[1].RaiseLevel(9);  // Charmander L1 -> L10 (ready for evolution in C3)
+    party[1].RaiseLevel(9);  // Charmander L1 -> L10 (ready for evolution)
 
-    // Reuse the same move as before for Bulbasaur; damage should increase by +2.
+    // Reuse the same move as before. For Bulbasaur damage should increase by +2.
+    // For Charmander damage should increase by +9
     party[0].UseAttackAt(1);
+    party[1].UseAttackAt(1);
 
-    // 5) Evolution – replace evolvable Pokémon in the party with their next form (C3).
+    // 5) Evolution – replace evolvable Pokémon in the party with their next form .
     Console.WriteLine("\n-- Evolution --");
     for (int i = 0; i < party.Count; i++)
     {

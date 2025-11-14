@@ -57,7 +57,3 @@ namespace Pokemon.Domain.Species
     }
 }
 
-// NOTE: In a real game, species data (name, type, moves, evolutions) 
-// would be stored in a registry or database rather than hardcoded in classes.
-// For this assignment, hardcoding is intentional to demonstrate inheritance 
-// and constructor chaining clearly.

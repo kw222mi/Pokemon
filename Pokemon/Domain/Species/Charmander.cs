@@ -14,8 +14,8 @@ namespace Pokemon.Domain.Species
         public Charmander()
             : base("Charmander", 1)
         {
-            var ember = new Attack("Ember", ElementType.Fire, 15);
-            var flameBurst = new Attack("Flame Burst", ElementType.Fire, 10);
+            var ember = new Attack("Ember", ElementType.Fire, 10);
+            var flameBurst = new Attack("Flame Burst", ElementType.Fire, 7);
 
             AddAttack(ember);
             AddAttack(flameBurst);
@@ -29,8 +29,8 @@ namespace Pokemon.Domain.Species
         public Charmander(int level)
             : base("Charmander", level)
         {
-            var ember = new Attack("Ember", ElementType.Fire, 15);
-            var flameBurst = new Attack("Flame Burst", ElementType.Fire, 10);
+            var ember = new Attack("Ember", ElementType.Fire, 10);
+            var flameBurst = new Attack("Flame Burst", ElementType.Fire, 7);
 
             AddAttack(ember);
             AddAttack(flameBurst);
@@ -57,6 +57,4 @@ namespace Pokemon.Domain.Species
     }
 }
 
-// NOTE: In a real game, species data (names, types, moves, evolution paths)
-// would be stored in a registry or database rather than hardcoded.
-// Here, hardcoding is intentional to demonstrate inheritance and constructor chaining.
+
