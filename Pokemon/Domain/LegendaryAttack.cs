@@ -9,7 +9,7 @@ namespace Pokemon.Domain
     internal class LegendaryAttack : Attack
     {
 
-        public LegendaryAttack  (Attack baseAttack) : base (baseAttack.Name, baseAttack.Type, baseAttack.BasePower)
+        public LegendaryAttack  (Attack baseAttack) : base ($"Legendary {baseAttack.Name} ", baseAttack.Type, baseAttack.BasePower)
         {
 
         }

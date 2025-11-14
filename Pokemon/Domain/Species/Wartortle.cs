@@ -14,9 +14,11 @@
         {
             var waterGun = new Attack("Water Gun", ElementType.Water, 15);
             var bubble = new Attack("Bubble", ElementType.Water, 11);
+            var legendaryBubble = new LegendaryAttack(bubble);
 
             AddAttack(waterGun);
             AddAttack(bubble);
+            AddAttack(legendaryBubble);
         }
 
         /// <summary>
@@ -29,9 +31,11 @@
         {
             var waterGun = new Attack("Water Gun", ElementType.Water, 15);
             var bubble = new Attack("Bubble", ElementType.Water, 11);
+            var legendaryBubble = new LegendaryAttack(bubble);
 
             AddAttack(waterGun);
             AddAttack(bubble);
+            AddAttack(legendaryBubble);
         }
     }
 }

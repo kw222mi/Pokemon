@@ -16,9 +16,11 @@ namespace Pokemon.Domain.Species
         {
             var fireKick = new Attack("Fire Kick", ElementType.Fire, 15);
             var flameBurst = new Attack("Flame Burst", ElementType.Fire, 10);
+            var superFireKick = new LegendaryAttack(fireKick);
 
             AddAttack(fireKick);
             AddAttack(flameBurst);
+            AddAttack(superFireKick);
         }
 
         /// <summary>
@@ -31,9 +33,11 @@ namespace Pokemon.Domain.Species
         {
             var fireKick = new Attack("Fire Kick", ElementType.Fire, 15);
             var flameBurst = new Attack("Flame Burst", ElementType.Fire, 10);
+            var superFireKick = new LegendaryAttack(fireKick);
 
             AddAttack(fireKick);
             AddAttack(flameBurst);
+            AddAttack(superFireKick);
         }
     }
 }
