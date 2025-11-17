@@ -98,6 +98,7 @@
 
             Console.WriteLine($"Level höjs till {Level} ");
 
+
             return this;
         }
 
@@ -110,12 +111,9 @@
         /// <exception cref="ArgumentNullException">Thrown if attack is null.</exception>
         public void UseAttack(Attack attack)
         {
-            if (attack is null)
-                throw new ArgumentNullException(nameof(attack), "Attack saknas.");
+            if (attack == null) throw new ArgumentNullException(nameof(attack));
 
-            int damage = attack.CalculateDamage(this.Level);
-
-            Console.WriteLine(attack.FormatMessage(Name, Level, damage));
+            attack.Use(Level);
         }
 
         /// <summary>

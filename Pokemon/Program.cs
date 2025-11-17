@@ -1,124 +1,112 @@
-﻿using Pokemon.Domain;
+﻿using System;
+using System.Collections.Generic;
+using Pokemon.Domain;
 using Pokemon.Domain.Species;
 
-
-// Entry point for the Pokémon console demo.
-// Demonstrates creation of a party, attacks, leveling, evolution and error handling.
-try
+namespace Pokemon
 {
-    Console.WriteLine("=== Pokémon demo start ===");
-
-    // 1) Create a party with three starter species.
-    //    Each species configures its own type and starting moves in the constructor.
-    var party = new List<PokemonCreature>
+    internal class Program
     {
-        new Bulbasaur(),   // Grass, L1, Vine Whip / Leafage
-        new Charmander(),  // Fire,  L1, Ember / Flame Burst
-        new Squirtle()     // Water, L1, Water Gun / Bubble
-    };
-
-    // 2) Print basic info and starting attacks for each Pokémon.
-    Console.WriteLine("\n-- Party info --");
-    foreach (var p in party)
-    {
-        p.PrintInfo();
-        p.ListAttacks();
-    }
-
-
-    foreach (var p in party)
-    {
-        p.Speak();
-    }
-
-
-    // 3) Use attacks by index to demonstrate attack list + UseAttackAt.
-    Console.WriteLine("\n-- UseAttackAt --");
-    party[0].UseAttackAt(1); // Bulbasaur uses Leafage
-    party[1].UseAttackAt(0); // Charmander uses Ember
-    party[2].UseAttackAt(0); // Squirtle uses Water Gun
-
-    // 4) Level up and verify that damage scales with level.
-    Console.WriteLine("\n--: RaiseLevel påverkar damage --");
-
-    party[0] = party[0].RaiseLevel(2); // Bulbasaur L1 -> L3
-    party[1] = party[1].RaiseLevel(9); // Bulbasaur L1 -> L3
-
-  
-    // Reuse the same move as before. For Bulbasaur damage should increase by +2.
-    // For Charmander damage should increase by +9
-    party[0].UseAttackAt(1);
-    party[1].UseAttackAt(1);
-
-    
-    // 5) Evolution – replace evolvable Pokémon in the party with their next form .
-    Console.WriteLine("\n-- Evolution --");
-    for (int i = 0; i < party.Count; i++)
-    {
-        var mon = party[i];
-
-        // Only Pokémon that implement IEvolvable can be evolved.
-        if (mon is IEvolvable evo)
+        static void Main(string[] args)
         {
             try
             {
-                // Evolve returns a new instance of the next species (e.g. Charmeleon) with +10 levels.
-                var evolved = evo.Evolve();
-                party[i] = evolved; // Replace the old Pokémon in the party with the evolved one.
+                Console.WriteLine("=== Pokémon trainer simulation start ===");
 
-                Console.WriteLine($"[OK] {mon.Name} utvecklas till {evolved.Name}! Ny level: {evolved.Level}");
+                // 1) Create a small party with different Pokémon.
+                // Charmander and Squirtle can evolve, Bulbasaur stays as it is.
+                var party = new List<PokemonCreature>
+                {
+                    new Charmander(9), // just below evolution threshold
+                    new Squirtle(9),
+                    new Bulbasaur(5)
+                };
 
-                evolved.PrintInfo();
-                evolved.ListAttacks();
+                // 2) Initial status: info + Speak() + attacks
+                Console.WriteLine("\n-- Initial party status --");
+                foreach (var mon in party)
+                {
+                    mon.PrintInfo();
+                    mon.Speak();
+                    mon.ListAttacks();
+                    Console.WriteLine();
+                }
 
-                // Try one attack after evolution to verify that everything still works.
-                evolved.UseAttackAt(0);
+                // 3) Trainer levels all Pokémon once.
+                // RaiseLevel may return a new evolved Pokémon, so we must store the result.
+                Console.WriteLine("\n-- Trainer levels all Pokémon --");
+                for (int i = 0; i < party.Count; i++)
+                {
+                    var current = party[i];
+
+                    Console.WriteLine($"\n[LEVEL UP] Processing {current.Name} ...");
+                    // New RaiseLevel-version returns the (possibly evolved) Pokémon
+                    var updated = current.RaiseLevel(1);
+
+                    if (!ReferenceEquals(current, updated))
+                    {
+                        // Evolution has occurred – replace in the party list.
+                        Console.WriteLine($"[EVOLUTION] {current.Name} has evolved into {updated.Name}!");
+                    }
+
+                    party[i] = updated;
+                }
+
+                // 4) After leveling: show new status (Speak + attacks)
+                Console.WriteLine("\n-- Party after leveling (and possible evolutions) --");
+                foreach (var mon in party)
+                {
+                    mon.PrintInfo();
+                    mon.Speak();
+                    mon.ListAttacks();
+                    Console.WriteLine();
+                }
+
+                // 5) Demonstrate attacks: normal + legendary where available
+                Console.WriteLine("\n-- Battle demo: attacks --");
+                foreach (var mon in party)
+                {
+                    Console.WriteLine($"\n{mon.Name} attacks!");
+
+                    // Always try first attack (index 0)
+                    try
+                    {
+                        mon.UseAttackAt(0);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"[ERROR] Could not use attack 0 for {mon.Name}: {ex.Message}");
+                    }
+
+                    // Try a possible legendary attack at index 2 (if it exists)
+                    try
+                    {
+                        mon.UseAttackAt(2); // Charmeleon / Wartortle should have a legendary move here
+                    }
+                    catch
+                    {
+                        // It's fine if not all Pokémon have a third attack.
+                    }
+                }
+
+                Console.WriteLine("\n=== Pokémon trainer simulation end ===");
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine($"[FEL] {ex.Message}");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"[FEL] {ex.Message}");
+            }
+            catch (OverflowException ex)
+            {
+                Console.WriteLine($"[FEL] Overflow i beräkning: {ex.Message}");
             }
             catch (Exception ex)
             {
-                // Local error handling for evolution: we log the problem but continue with the rest of the party.
-                Console.WriteLine($"[FEL vid evolution av {mon.Name}] {ex.Message}");
+                Console.WriteLine($"[OVÄNTAT FEL] {ex.Message}");
             }
         }
-        else
-        {
-            // Information for non-evolvable species (e.g. Bulbasaur if you chose not to implement evolution yet).
-            Console.WriteLine($"[INFO] {mon.Name} kan inte evolva (IEvolvable saknas).");
-        }
     }
-    
-
-    // 6) Error path demo – show that invalid input is handled and does not crash the program.
-    Console.WriteLine("\n-- Felvägar (error paths) --");
-    try
-    {
-        // Intentionally use an invalid index to trigger validation in UseAttackAt.
-        party[1].UseAttackAt(99);
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"[FEL väntat] {ex.Message}");
-    }
-
-    Console.WriteLine("\n=== Pokémon demo slut ===");
-}
-catch (ArgumentOutOfRangeException ex)
-{
-    // Domain-level validation errors where a numeric argument is out of the allowed range.
-    Console.WriteLine($"[FEL] {ex.Message}");
-}
-catch (ArgumentException ex)
-{
-    // General argument validation errors (e.g. empty name, invalid base power, etc.).
-    Console.WriteLine($"[FEL] {ex.Message}");
-}
-catch (OverflowException ex)
-{
-    // Overflow in arithmetic (e.g. BasePower + Level exceeding int.MaxValue).
-    Console.WriteLine($"[FEL] Overflow i beräkning: {ex.Message}");
-}
-catch (Exception ex)
-{
-    // Final safety net for any unexpected exception types.
-    Console.WriteLine($"[OVÄNTAT FEL] {ex.Message}");
 }
