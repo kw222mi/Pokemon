@@ -36,6 +36,16 @@ namespace Pokemon.Domain.Species
             AddAttack(flameBurst);
         }
 
+
+
+        public override PokemonCreature RaiseLevel(int delta)
+        {
+            base.RaiseLevel(delta);
+            if (Level < 10)
+                return this;
+            return Evolve(); 
+        }
+
         /// <summary>
         /// Evolves Charmander into Charmeleon.
         /// Evolution requires at least level 10 and increases the level by +10.

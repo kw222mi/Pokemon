@@ -82,7 +82,7 @@
         /// <exception cref="OverflowException">
         /// Thrown if the addition overflows the int range.
         /// </exception>
-        public void RaiseLevel(int delta)
+        public virtual PokemonCreature RaiseLevel(int delta)
         {
             if (delta <= 0)
                 throw new ArgumentException("Level-ökning måste vara > 0.", nameof(delta));
@@ -97,6 +97,8 @@
             Level = newLevel;
 
             Console.WriteLine($"Level höjs till {Level} ");
+
+            return this;
         }
 
         /// <summary>

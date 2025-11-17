@@ -40,14 +40,17 @@ try
 
     // 4) Level up and verify that damage scales with level.
     Console.WriteLine("\n--: RaiseLevel påverkar damage --");
-    party[0].RaiseLevel(2);  // Bulbasaur L1 -> L3
-    party[1].RaiseLevel(9);  // Charmander L1 -> L10 (ready for evolution)
 
+    party[0] = party[0].RaiseLevel(2); // Bulbasaur L1 -> L3
+    party[1] = party[1].RaiseLevel(9); // Bulbasaur L1 -> L3
+
+  
     // Reuse the same move as before. For Bulbasaur damage should increase by +2.
     // For Charmander damage should increase by +9
     party[0].UseAttackAt(1);
     party[1].UseAttackAt(1);
 
+    
     // 5) Evolution – replace evolvable Pokémon in the party with their next form .
     Console.WriteLine("\n-- Evolution --");
     for (int i = 0; i < party.Count; i++)
@@ -83,6 +86,7 @@ try
             Console.WriteLine($"[INFO] {mon.Name} kan inte evolva (IEvolvable saknas).");
         }
     }
+    
 
     // 6) Error path demo – show that invalid input is handled and does not crash the program.
     Console.WriteLine("\n-- Felvägar (error paths) --");
